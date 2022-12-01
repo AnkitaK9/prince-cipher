@@ -161,5 +161,66 @@ def princeDecryption(ciphertext, key):
     decryption = commonEncDecFunction(ciphertext, k0Prime, k0, new_k1)
     return decryption
 
-print(princeEncryption("0000000000000000", "00000000000000000000000000000000"))
-print(princeDecryption("818665aa0d02dfda", "00000000000000000000000000000000"))
+def ECBModeEnc(plaintext, key):
+    input_list = [(plaintext[i:i+16]) for i in range(0, len(plaintext), 16)]
+    finalEncryption=""
+    for k in input_list:
+        finalEncryption+=princeEncryption(k, key)
+    return finalEncryption
+
+def ECBModeDec(ciphertext, key):
+    input_list = [(ciphertext[i:i+16]) for i in range(0, len(ciphertext), 16)]
+    finalDecryption=""
+    for k in input_list:
+        finalDecryption+=princeDecryption(k, key)
+    return finalDecryption
+
+def CBCModeEnc(plaintext, key, iv):
+    input_list = [(plaintext[i:i+16]) for i in range(0, len(plaintext), 16)]
+    finalEncryptionList = [iv]
+    for k in range(len(input_list)):
+        finalEncryptionList.append(princeEncryption(keyXor(input_list[k], finalEncryptionList[k]), key))
+    ansString=""
+    ansString=ansString.join(finalEncryptionList)
+    return ansString
+
+def CBCModeDec(ciphertext, key):
+    input_list = [(ciphertext[i:i+16]) for i in range(0, len(ciphertext), 16)]
+    finalDecryption=""
+    for i in range(1, len(input_list)):
+        decryptPrince = princeDecryption(input_list[i], key)
+        cbcXor = keyXor(decryptPrince, input_list[i-1])
+        finalDecryption+=cbcXor
+    return finalDecryption
+
+# print(princeEncryption("0000000000000000", "00000000000000000000000000000000"))
+# print(princeDecryption("818665aa0d02dfda", "00000000000000000000000000000000"))
+
+encOrdec = input("Enter E for encryption or D for decryption: ")
+inputText = input("Enter the plaintext/ciphertext.")
+inputKey = input("Enter the 128 bit key: ")
+mode = input("Enter the mode (ECB/CBC): ")
+
+while (len(inputText)%16!=0):
+    inputText+="0"
+
+while (len(inputKey)<32):
+    inputKey+="0"
+
+if (mode=="CBC"):
+    if (encOrdec=="E"):
+        iv = input("Enter a 64 bit iv: ")
+        while (len(iv)<16):
+            iv+='0'
+        ciphertext = CBCModeEnc(inputText, inputKey, iv)
+        print(ciphertext)
+    else:
+        plaintext = CBCModeDec(inputText, inputKey)
+        print(plaintext)
+elif (mode=="ECB"):
+    if (encOrdec=="E"):
+        ciphertext = ECBModeEnc(inputText, inputKey)
+        print(ciphertext)
+    else:
+        plaintext =ECBModeDec(inputText, inputKey)
+        print(plaintext)
