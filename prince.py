@@ -107,7 +107,6 @@ def matrixLayer(inputHex):
         resList.append(mulResult)
 
     resList=[(''.join(map(str,resList[i:i+4]))) for i in range(0,len(resList),4)]
-
     return (binListHexString(resList))
 
 def commonEncDecFunction(plaintext, k0, k0Prime, k1):
