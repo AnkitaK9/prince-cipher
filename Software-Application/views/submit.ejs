@@ -9,8 +9,14 @@
     <form action="/submit" method="POST">
 
       <div class="form-group">
+        
         <input type="text" class="form-control text-center" name="secret" placeholder="What's your confession?">
-        <input type="text" class="form-control text-center" name="email" placeholder="Who's your confession for?">
+        <label for="target">Who's your confession for? </label>
+        <select name="target" id="target" class="form-control text-center">
+          <% for (let i=0; i<emails.length;i++){ %>
+            <option value=<%= emails[i]%>><%= emails[i] %></option>
+            <% } %>    
+        </select>
       </div>
       <button type="submit" class="btn btn-dark">Submit</button>
     </form>

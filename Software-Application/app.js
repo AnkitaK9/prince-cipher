@@ -344,11 +344,18 @@ app.post("/login", function(req, res){
 })
 
 app.get("/submit", function(req, res){
-    res.render("submit")
+    let userEmails=[]
+    User.find(function(err, users){
+        for (let x=0;x<users.length;x++){
+          userEmails.push(users[x].email);
+        }
+        res.render("submit", {emails:userEmails})
+    })
+    
 })
 
 app.post("/submit", function(req, res){
-    let username = req.body.email;
+    let username = req.body.target;
     let message = req.body.secret;
 
     let hexMessage = buffer.Buffer.from(message).toString('hex');
