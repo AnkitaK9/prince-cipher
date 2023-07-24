@@ -1,4 +1,4 @@
-# Confessions App Using Prince Cipher 
+# Confessions Page Using Prince Cipher 
 
 ## Introduction
 Confessions App is a web application that allows users to submit and view confessions anonymously. It provides a secure and private platform for users to share their thoughts without revealing their identities.
